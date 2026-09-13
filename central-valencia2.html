@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valencia Central</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 40px 20px;
+            position: relative;
+        }
+
+        /* Pantalla de Intro Moderna y Llamativa */
+        #introScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #090d16;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(49, 130, 206, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(43, 108, 176, 0.15) 0%, transparent 40%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+            transition: opacity 1s ease, visibility 1s ease;
+        }
+
+        .intro-container {
+            text-align: center;
+            animation: introPop 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            padding: 0 20px;
+        }
+
+        .intro-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            background: rgba(49, 130, 206, 0.2);
+            color: #63b3ed;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            border: 1px solid rgba(99, 179, 237, 0.3);
+        }
+
+        .intro-title-modern {
+            font-size: 4rem;
+            font-weight: 900;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #ffffff;
+            margin-bottom: 25px;
+            background: linear-gradient(135deg, #ffffff 30%, #93c5fd 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .intro-loader-container {
+            width: 220px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 0 auto;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
+        }
+
+        .intro-loader-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #3182ce, #63b3ed);
+            border-radius: 10px;
+            animation: loadBar 7s linear forwards;
+            box-shadow: 0 0 10px rgba(49, 130, 206, 0.8);
+        }
+
+        @keyframes introPop {
+            0% { opacity: 0; transform: translateY(20px) scale(0.95); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes loadBar {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        @media (max-width: 1024px) {
+            .intro-title-modern {
+                font-size: 2.8rem;
+            }
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            z-index: 101;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #1a365d;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        p.subtitle {
+            font-size: 1.1rem;
+            color: #4a5568;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            max-width: 400px;
+            margin-bottom: 40px;
+            z-index: 101;
+        }
+
+        .btn {
+            background-color: #ffffff;
+            color: #2d3748;
+            border: 2px solid #e2e8f0;
+            padding: 15px 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            width: 100%;
+        }
+
+        .btn:hover {
+            background-color: #3182ce;
+            color: #ffffff;
+            border-color: #3182ce;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(49, 130, 206, 0.2);
+        }
+
+        .btn-secretaria {
+            background-color: #2b6cb0;
+            color: #ffffff;
+            border-color: #2b6cb0;
+        }
+
+        .btn-secretaria:hover {
+            background-color: #2c5282;
+            border-color: #2c5282;
+        }
+
+        .btn-visitas {
+            background-color: #2f855a;
+            color: #ffffff;
+            border-color: #2f855a;
+        }
+
+        .btn-visitas:hover {
+            background-color: #276749;
+            border-color: #276749;
+        }
+
+        /* Panel de Secretaría a Pantalla Completa */
+        #vistaSecretaria {
+            display: none; 
+            width: 100%;
+            max-width: 950px;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+            z-index: 101;
+        }
+
+        .secretaria-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .secretaria-header h2 {
+            color: #1a365d;
+            font-size: 1.5rem;
+        }
+
+        .secretaria-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-excel {
+            background-color: #276749;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: background-color 0.2s;
+        }
+
+        .btn-excel:hover {
+            background-color: #22543d;
+        }
+
+        .btn-volver {
+            background-color: #4a5568;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: background-color 0.2s;
+        }
+
+        .btn-volver:hover {
+            background-color: #2d3748;
+        }
+
+        /* Ventanas Modales */
+        .modal {
+            display: none; 
+            position: fixed;
+            z-index: 99999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.8rem;
+            color: #aaa;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .close-btn:hover {
+            color: #000;
+        }
+
+        .modal-content h2 {
+            margin-bottom: 20px;
+            color: #1a365d;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #4a5568;
+            font-size: 0.9rem;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #cbd5e0;
+            border-radius: 6px;
+            font-size: 1rem;
+            outline: none;
+            background: #fff;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            border-color: #3182ce;
+        }
+
+        .submit-btn {
+            background-color: #3182ce;
+            color: white;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            background-color: #2b6cb0;
+        }
+
+        /* Pestañas del Panel */
+        .sec-tabs {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+
+        .sec-tab-btn {
+            background-color: #e2e8f0;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #4a5568;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .sec-tab-btn.active {
+            background-color: #2b6cb0;
+            color: white;
+        }
+
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background-color: #f7fafc;
+            color: #4a5568;
+            font-weight: 600;
+        }
+
+        td {
+            color: #2d3748;
+        }
+
+        .no-data {
+            text-align: center;
+            color: #718096;
+            padding: 20px;
+        }
+
+        .btn-acciones {
+            display: flex;
+            gap: 5px;
+        }
+
+        .btn-editar {
+            background-color: #d69e2e;
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            text-decoration: none;
+        }
+
+        .btn-editar:hover {
+            background-color: #b7791f;
+        }
+
+        .btn-borrar {
+            background-color: #e53e3e;
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .btn-borrar:hover {
+            background-color: #c53030;
+        }
+
+        #seccionArchivos {
+            display: none;
+        }
+
+        .upload-box {
+            background-color: #f7fafc;
+            border: 2px dashed #cbd5e0;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #718096;
+            z-index: 101;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Pantalla de Intro -->
+    <div id="introScreen">
+        <div class="intro-container">
+            <div class="intro-badge">Bienvenido</div>
+            <h1 class="intro-title-modern">Valencia Central</h1>
+            <div class="intro-loader-container">
+                <div class="intro-loader-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <header>
+        <h1>Valencia Central</h1>
+        <p class="subtitle" id="subtituloPrincipal">Panel de Acceso y Departamentos</p>
+    </header>
+
+    <!-- Menú Principal -->
+    <div class="container" id="menuPrincipal">
+        <button type="button" class="btn btn-secretaria" onclick="abrirLoginSecretaria()">Administrado por Secretaría</button>
+        <button type="button" class="btn btn-visitas" onclick="abrirFormularioVisitas()">Formulario Visitas</button>
+        
+        <button type="button" class="btn" onclick="solicitarPasswordDepto('ujieres', 'Ujieres')">Ujieres</button>
+        <button type="button" class="btn" onclick="solicitarPasswordDepto('escuela-dominical', 'Escuela Dominical')">Escuela Dominical</button>
+        <button type="button" class="btn" onclick="solicitarPasswordDepto('caballeros', 'Caballeros')">Caballeros</button>
+        <button type="button" class="btn" onclick="solicitarPasswordDepto('mujeres-del-bien', 'Mujeres del Bien')">Mujeres del Bien</button>
+        <button type="button" class="btn" onclick="solicitarPasswordDepto('jovenes', 'Jóvenes')">Jóvenes</button>
+        <button type="button" class="btn" onclick="solicitarPasswordDepto('alabanza', 'Alabanza')">Alabanza</button>
+    </div>
+
+    <!-- Modal Login Secretaría -->
+    <div id="modalLoginSecretaria" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="cerrarLoginSecretaria()">&times;</span>
+            <h2>Acceso Secretaría</h2>
+            <form id="formLoginSecretaria" onsubmit="verificarLoginSecretaria(event)">
+                <div class="form-group">
+                    <label for="usuarioSecretaria">Usuario</label>
+                    <input type="text" id="usuarioSecretaria" required placeholder="Usuario">
+                </div>
+                <div class="form-group">
+                    <label for="passwordSecretaria">Contraseña</label>
+                    <input type="password" id="passwordSecretaria" required placeholder="Contraseña">
+                </div>
+                <button type="submit" class="submit-btn">Ingresar al Panel</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Formulario Visitas -->
+    <div id="modalVisitas" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="cerrarFormularioVisitas()">&times;</span>
+            <h2>Formulario Visitas</h2>
+            <form id="formVisitas" onsubmit="guardarVisitaCloud(event)">
+                <div class="form-group">
+                    <label for="visita-tipo">Tipo de Visita</label>
+                    <select id="visita-tipo" required>
+                        <option value="">Seleccione una opción</option>
+                        <option value="Primera vez">Primera vez</option>
+                        <option value="Frecuente">Frecuente</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="visita-nombre">Nombre y Apellidos</label>
+                    <input type="text" id="visita-nombre" required placeholder="Nombre y apellidos">
+                </div>
+                <div class="form-group">
+                    <label for="visita-pais">País</label>
+                    <input type="text" id="visita-pais" required placeholder="Tu país">
+                </div>
+                <button type="submit" class="submit-btn">Enviar Visita</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Vista del Panel de Secretaría -->
+    <div id="vistaSecretaria">
+        <div class="secretaria-header">
+            <h2>Panel de Control - Secretaría</h2>
+            <div class="secretaria-actions">
+                <button class="btn-excel" onclick="exportarAExcel()">📊 Exportar a Excel</button>
+                <button class="btn-volver" id="btnVolver">Volver al Menú Principal</button>
+            </div>
+        </div>
+        
+        <div class="sec-tabs">
+            <button class="sec-tab-btn active" onclick="cambiarVistaSecretaria('ujieres', this)">Ujieres</button>
+            <button class="sec-tab-btn" onclick="cambiarVistaSecretaria('escuela-dominical', this)">Escuela Dominical</button>
+            <button class="sec-tab-btn" onclick="cambiarVistaSecretaria('caballeros', this)">Caballeros</button>
+            <button class="sec-tab-btn" onclick="cambiarVistaSecretaria('mujeres-del-bien', this)">Mujeres del Bien</button>
+            <button class="sec-tab-btn" onclick="cambiarVistaSecretaria('jovenes', this)">Jóvenes</button>
+            <button class="sec-tab-btn" onclick="cambiarVistaSecretaria('alabanza', this)">Alabanza</button>
+            <button class="sec-tab-btn" onclick="cambiarVistaSecretaria('visitas', this)">⭐ Visitas</button>
+            <button class="sec-tab-btn" onclick="cambiarVistaSecretaria('archivos', this)">📂 Subir Archivos</button>
+        </div>
+
+        <div id="seccionTablas">
+            <div class="table-responsive">
+                <table id="tablaExportar">
+                    <thead>
+                        <tr id="tablaEncabezado">
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Teléfono</th>
+                            <th>Ciudad</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaControlSecretaria">
+                        <tr><td colspan="5" class="no-data">Sincronizando datos con Google Drive...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="seccionArchivos">
+            <div class="upload-box">
+                <h3>Subir Nuevo Archivo</h3>
+                <form id="formArchivo" style="margin-top: 15px;" onsubmit="subirArchivo(event)">
+                    <div class="form-group" style="text-align: left;">
+                        <label for="nombreArchivo">Nombre o Descripción del Archivo</label>
+                        <input type="text" id="nombreArchivo" required placeholder="Ej: Circular Mensual">
+                    </div>
+                    <div class="form-group" style="text-align: left;">
+                        <label for="archivoInput">Seleccionar Archivo</label>
+                        <input type="file" id="archivoInput" required style="background: white;">
+                    </div>
+                    <button type="submit" class="submit-btn">Subir Archivo</button>
+                </form>
+            </div>
+
+            <h3 style="margin-bottom: 15px; color: #1a365d;">Archivos Almacenados</h3>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nombre del Archivo</th>
+                            <th>Tipo / Formato</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaArchivos">
+                        <!-- Dinámico -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Formulario Departamentos -->
+    <div id="modalGenerico" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="cerrarFormulario()">&times;</span>
+            <h2 id="tituloModalDepto">Registro</h2>
+            <form id="formGenerico" onsubmit="guardarRegistroCloud(event)">
+                <input type="hidden" id="deptoActual">
+                <input type="hidden" id="indiceEdicion" value="-1">
+                <div class="form-group">
+                    <label for="gen-nombre">Nombre</label>
+                    <input type="text" id="gen-nombre" required placeholder="Tu nombre">
+                </div>
+                <div class="form-group">
+                    <label for="gen-apellido">Apellido</label>
+                    <input type="text" id="gen-apellido" required placeholder="Tu apellido">
+                </div>
+                <div class="form-group">
+                    <label for="gen-telefono">Teléfono</label>
+                    <input type="tel" id="gen-telefono" required placeholder="Ej: 600123456">
+                </div>
+                <div class="form-group">
+                    <label for="gen-ciudad">Ciudad</label>
+                    <input type="text" id="gen-ciudad" required placeholder="Tu ciudad">
+                </div>
+                <button type="submit" class="submit-btn" id="btnGuardarForm">Guardar Registro</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Valencia Central. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        // LA ÚNICA API URL PARA TODO EL SISTEMA
+        const API_URL = "https://sheetdb.io/api/v1/8ls31b75h93m6";
+
+        const USER_SECRETARIA = "s";
+        const PASSWORD_SECRETARIA = "123";
+        const PASSWORD_DEPTO = "123";
+
+        // Control de Intro
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                const intro = document.getElementById('introScreen');
+                if (intro) {
+                    intro.style.opacity = '0';
+                    setTimeout(function() {
+                        intro.style.display = 'none';
+                    }, 1000); 
+                }
+            }, 7000); 
+        });
+
+        const menuPrincipal = document.getElementById('menuPrincipal');
+        const vistaSecretaria = document.getElementById('vistaSecretaria');
+        const subtituloPrincipal = document.getElementById('subtituloPrincipal');
+        
+        const btnVolver = document.getElementById('btnVolver');
+        const modalLoginSecretaria = document.getElementById('modalLoginSecretaria');
+        const modalVisitas = document.getElementById('modalVisitas');
+        const modalGenerico = document.getElementById('modalGenerico');
+        const tituloModalDepto = document.getElementById('tituloModalDepto');
+        const deptoActualInput = document.getElementById('deptoActual');
+        const indiceEdicionInput = document.getElementById('indiceEdicion');
+        const formGenerico = document.getElementById('formGenerico');
+        const tablaControlSecretaria = document.getElementById('tablaControlSecretaria');
+        const tablaEncabezado = document.getElementById('tablaEncabezado');
+        
+        const seccionTablas = document.getElementById('seccionTablas');
+        const seccionArchivos = document.getElementById('seccionArchivos');
+        const tablaArchivos = document.getElementById('tablaArchivos');
+
+        let departamentoSeleccionadoSecretaria = 'ujieres';
+
+        function abrirLoginSecretaria() {
+            modalLoginSecretaria.style.display = 'flex';
+        }
+
+        function cerrarLoginSecretaria() {
+            modalLoginSecretaria.style.display = 'none';
+            document.getElementById('formLoginSecretaria').reset();
+        }
+
+        function verificarLoginSecretaria(event) {
+            event.preventDefault();
+            const usuarioIngresado = document.getElementById('usuarioSecretaria').value;
+            const passwordIngresado = document.getElementById('passwordSecretaria').value;
+
+            if (usuarioIngresado === USER_SECRETARIA && passwordIngresado === PASSWORD_SECRETARIA) {
+                cerrarLoginSecretaria();
+                menuPrincipal.style.display = 'none';
+                subtituloPrincipal.innerText = 'Gestión y Control en Google Drive';
+                cambiarVistaSecretaria('ujieres', document.querySelector('.sec-tab-btn'));
+                vistaSecretaria.style.display = 'block';
+            } else {
+                alert("Usuario o contraseña incorrectos.");
+            }
+        }
+
+        function abrirFormularioVisitas() {
+            modalVisitas.style.display = 'flex';
+        }
+
+        function cerrarFormularioVisitas() {
+            modalVisitas.style.display = 'none';
+            document.getElementById('formVisitas').reset();
+        }
+
+        async function guardarVisitaCloud(event) {
+            event.preventDefault();
+            const tipoVisita = document.getElementById('visita-tipo').value;
+            const nombreCompleto = document.getElementById('visita-nombre').value;
+            const paisVisita = document.getElementById('visita-pais').value;
+
+            const nuevaVisita = {
+                nombre: `[${tipoVisita}] ${nombreCompleto}`,
+                apellido: "",
+                telefono: "",
+                ciudad: paisVisita,
+                depto: "visita"
+            };
+
+            try {
+                await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+                    body: JSON.stringify(nuevaVisita)
+                });
+                alert('¡Visita registrada y sincronizada en Google Drive con éxito!');
+                cerrarFormularioVisitas();
+            } catch (error) {
+                alert('Error al sincronizar la visita con Google Drive.');
+            }
+        }
+
+        function solicitarPasswordDepto(claveDepto, nombreDepto) {
+            let pass = prompt(`Introduce la contraseña para el departamento de ${nombreDepto}:`);
+            if (pass === PASSWORD_DEPTO) {
+                abrirFormulario(claveDepto, nombreDepto);
+            } else if (pass !== null) {
+                alert("Contraseña incorrecta.");
+            }
+        }
+
+        if (btnVolver) {
+            btnVolver.addEventListener('click', () => {
+                vistaSecretaria.style.display = 'none';
+                subtituloPrincipal.innerText = 'Panel de Acceso y Departamentos';
+                menuPrincipal.style.display = 'flex';
+            });
+        }
+
+        window.addEventListener('click', (event) => {
+            if (event.target === modalLoginSecretaria) cerrarLoginSecretaria();
+            if (event.target === modalVisitas) cerrarFormularioVisitas();
+            if (event.target === modalGenerico) modalGenerico.style.display = 'none';
+        });
+
+        function abrirFormulario(claveDepto, nombreDepto, indice = -1, datos = null) {
+            deptoActualInput.value = claveDepto;
+            indiceEdicionInput.value = indice;
+
+            if (datos) {
+                tituloModalDepto.innerText = `Editar Registro - ${nombreDepto}`;
+                document.getElementById('gen-nombre').value = datos.nombre || '';
+                document.getElementById('gen-apellido').value = datos.apellido || '';
+                document.getElementById('gen-telefono').value = datos.telefono || '';
+                document.getElementById('gen-ciudad').value = datos.ciudad || '';
+                document.getElementById('btnGuardarForm').innerText = 'Actualizar Registro';
+            } else {
+                tituloModalDepto.innerText = `Registro - ${nombreDepto}`;
+                formGenerico.reset();
+                document.getElementById('btnGuardarForm').innerText = 'Enviar Registro';
+            }
+            modalGenerico.style.display = 'flex';
+        }
+
+        function cerrarFormulario() {
+            modalGenerico.style.display = 'none';
+            formGenerico.reset();
+            indiceEdicionInput.value = -1;
+        }
+
+        async function guardarRegistroCloud(event) {
+            event.preventDefault();
+            const depto = deptoActualInput.value;
+            const indice = parseInt(indiceEdicionInput.value);
+
+            const nuevoRegistro = {
+                nombre: document.getElementById('gen-nombre').value,
+                apellido: document.getElementById('gen-apellido').value,
+                telefono: document.getElementById('gen-telefono').value,
+                ciudad: document.getElementById('gen-ciudad').value,
+                depto: depto
+            };
+
+            try {
+                if (indice === -1) {
+                    await fetch(API_URL, {
+                        method: 'POST',
+                        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+                        body: JSON.stringify(nuevoRegistro)
+                    });
+                    alert('¡Registrado y sincronizado en Google Drive con éxito!');
+                } else {
+                    await fetch(`${API_URL}/telefono/${nuevoRegistro.telefono}`, {
+                        method: 'PUT',
+                        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+                        body: JSON.stringify(nuevoRegistro)
+                    });
+                    alert('¡Actualizado en Google Drive con éxito!');
+                }
+
+                cerrarFormulario();
+                if (vistaSecretaria.style.display === 'block') {
+                    cargarDatosSecretaria(depto);
+                }
+            } catch (error) {
+                alert('Error al sincronizar con Google Drive.');
+            }
+        }
+
+        function cambiarVistaSecretaria(depto, elementoTab) {
+            departamentoSeleccionadoSecretaria = depto;
+            document.querySelectorAll('.sec-tab-btn').forEach(btn => btn.classList.remove('active'));
+            if (elementoTab) elementoTab.classList.add('active');
+
+            if (depto === 'archivos') {
+                seccionTablas.style.display = 'none';
+                seccionArchivos.style.display = 'block';
+                cargarArchivos();
+            } else if (depto === 'visitas') {
+                seccionArchivos.style.display = 'none';
+                seccionTablas.style.display = 'block';
+                cargarVisitasSecretaria();
+            } else {
+                seccionArchivos.style.display = 'none';
+                seccionTablas.style.display = 'block';
+                cargarDatosSecretaria(depto);
+            }
+        }
+
+        async function cargarDatosSecretaria(depto) {
+            tablaEncabezado.innerHTML = `
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Teléfono</th>
+                <th>Ciudad</th>
+                <th>Acciones</th>
+            `;
+            tablaControlSecretaria.innerHTML = `<tr><td colspan="5" class="no-data">Cargando datos desde Google Drive...</td></tr>`;
+            try {
+                let response = await fetch(`${API_URL}/search?depto=${depto}`);
+                let registros = await response.json();
+                
+                tablaControlSecretaria.innerHTML = '';
+
+                if (!registros || registros.length === 0) {
+                    tablaControlSecretaria.innerHTML = `<tr><td colspan="5" class="no-data">No hay registros en este departamento.</td></tr>`;
+                    return;
+                }
+
+                let nombresDeptos = {
+                    'ujieres': 'Ujieres',
+                    'escuela-dominical': 'Escuela Dominical',
+                    'caballeros': 'Caballeros',
+                    'mujeres-del-bien': 'Mujeres del Bien',
+                    'jovenes': 'Jóvenes',
+                    'alabanza': 'Alabanza'
+                };
+
+                registros.forEach((reg) => {
+                    let fila = document.createElement('tr');
+                    let datosStr = JSON.stringify(reg).replace(/'/g, "&#39;").replace(/"/g, '&quot;');
+                    fila.innerHTML = `
+                        <td>${reg.nombre || ''}</td>
+                        <td>${reg.apellido || ''}</td>
+                        <td>${reg.telefono || ''}</td>
+                        <td>${reg.ciudad || ''}</td>
+                        <td>
+                            <div class="btn-acciones">
+                                <button class="btn-editar" onclick='prepararEdicionSegura("${depto}", "${nombresDeptos[depto]}", ${datosStr})'>Editar</button>
+                                <button class="btn-borrar" onclick="eliminarRegistroSecretaria('${depto}', '${reg.telefono}')">Eliminar</button>
+                            </div>
+                        </td>
+                    `;
+                    tablaControlSecretaria.appendChild(fila);
+                });
+            } catch (error) {
+                tablaControlSecretaria.innerHTML = `<tr><td colspan="5" class="no-data">Error de conexión con Google Drive.</td></tr>`;
+            }
+        }
+
+        function prepararEdicionSegura(depto, nombreDepto, datosObj) {
+            abrirFormulario(depto, nombreDepto, 0, datosObj);
+        }
+
+        async function cargarVisitasSecretaria() {
+            tablaEncabezado.innerHTML = `
+                <th>Información de Visita (Tipo y Nombre)</th>
+                <th>País</th>
+                <th>Acciones</th>
+            `;
+            tablaControlSecretaria.innerHTML = `<tr><td colspan="3" class="no-data">Cargando visitas desde Google Drive...</td></tr>`;
+            try {
+                let response = await fetch(`${API_URL}/search?depto=visita`);
+                let visitas = await response.json();
+                
+                tablaControlSecretaria.innerHTML = '';
+
+                if (!visitas || visitas.length === 0) {
+                    tablaControlSecretaria.innerHTML = `<tr><td colspan="3" class="no-data">No hay visitas registradas todavía.</td></tr>`;
+                    return;
+                }
+
+                visitas.forEach((vis) => {
+                    let fila = document.createElement('tr');
+                    fila.innerHTML = `
+                        <td>${vis.nombre || ''}</td>
+                        <td>${vis.ciudad || ''}</td>
+                        <td>
+                            <div class="btn-acciones">
+                                <button class="btn-borrar" onclick="eliminarVisita('${vis.nombre}')">Eliminar</button>
+                            </div>
+                        </td>
+                    `;
+                    tablaControlSecretaria.appendChild(fila);
+                });
+            } catch (error) {
+                tablaControlSecretaria.innerHTML = `<tr><td colspan="3" class="no-data">Error de conexión con Google Drive para visitas.</td></tr>`;
+            }
+        }
+
+        // FUNCIÓN PARA EXPORTAR LA TABLA ACTUAL A EXCEL (.xls)
+        function exportarAExcel() {
+            const tabla = document.getElementById('tablaExportar');
+            if (!tabla) return;
+
+            let html = tabla.outerHTML;
+            // Limpiar la última columna de acciones para que no salga en el excel
+            html = html.replace(/<th>Acciones<\/th>/g, '');
+            html = html.replace(/<td>[\s\S]*?<\/td>\s*<\/tr>/g, '</td></tr>'); // Elimina celdas de botones de acción
+
+            // Crear archivo virtual de Excel
+            let blob = new Blob(['\ufeff' + html], {
+                type: 'application/vnd.ms-excel'
+            });
+
+            let url = URL.createObjectURL(blob);
+            let a = document.createElement('a');
+            a.href = url;
+            a.download = `Valencia_Central_${departamentoSeleccionadoSecretaria.toUpperCase()}.xls`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        async function eliminarVisita(nombreVisita) {
+            if (confirm('¿Estás seguro de que deseas eliminar esta visita?')) {
+                try {
+                    let nombreCodificado = encodeURIComponent(nombreVisita);
+                    await fetch(`${API_URL}/nombre/${nombreCodificado}`, {
+                        method: 'DELETE'
+                    });
+                    cargarVisitasSecretaria();
+                } catch (error) {
+                    alert('No se pudo eliminar la visita.');
+                }
+            }
+        }
+
+        async function eliminarRegistroSecretaria(depto, telefono) {
+            if (confirm('¿Estás seguro de que deseas eliminar este registro?')) {
+                try {
+                    await fetch(`${API_URL}/telefono/${telefono}`, {
+                        method: 'DELETE'
+                    });
+                    cargarDatosSecretaria(depto);
+                } catch (error) {
+                    alert('No se pudo eliminar el registro de Google Drive.');
+                }
+            }
+        }
+
+        function subirArchivo(event) {
+            event.preventDefault();
+            const nombreArchivo = document.getElementById('nombreArchivo').value;
+            const archivoInput = document.getElementById('archivoInput').files[0];
+            if (!archivoInput) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const archivoData = {
+                    nombre: nombreArchivo,
+                    tipo: archivoInput.name.split('.').pop().toUpperCase(),
+                    url: e.target.result
+                };
+                let archivos = JSON.parse(localStorage.getItem('archivosSecretaria')) || [];
+                archivos.push(archivoData);
+                localStorage.setItem('archivosSecretaria', JSON.stringify(archivos));
+                alert('¡Archivo subido con éxito!');
+                document.getElementById('formArchivo').reset();
+                cargarArchivos();
+            };
+            reader.readAsDataURL(archivoInput);
+        }
+
+        function cargarArchivos() {
+            let archivos = JSON.parse(localStorage.getItem('archivosSecretaria')) || [];
+            tablaArchivos.innerHTML = '';
+            if (archivos.length === 0) {
+                tablaArchivos.innerHTML = `<tr><td colspan="3" class="no-data">No hay archivos subidos todavía.</td></tr>`;
+                return;
+            }
+            archivos.forEach((arch, index) => {
+                let fila = document.createElement('tr');
+                fila.innerHTML = `
+                    <td>${arch.nombre}</td>
+                    <td>${arch.tipo}</td>
+                    <td>
+                        <div class="btn-acciones">
+                            <a href="${arch.url}" download="${arch.nombre}.${arch.tipo.toLowerCase()}" class="btn-editar" style="text-align:center;">Descargar</a>
+                            <button class="btn-borrar" onclick="eliminarArchivo(${index})">Eliminar</button>
+                        </div>
+                    </td>
+                `;
+                tablaArchivos.appendChild(fila);
+            });
+        }
+
+        function eliminarArchivo(index) {
+            if (confirm('¿Estás seguro de que deseas eliminar este archivo?')) {
+                let archivos = JSON.parse(localStorage.getItem('archivosSecretaria')) || [];
+                archivos.splice(index, 1);
+                localStorage.setItem('archivosSecretaria', JSON.stringify(archivos));
+                cargarArchivos();
+            }
+        }
+    </script>
+</body>
+</html>
