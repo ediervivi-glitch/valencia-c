@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escanear QR y Guardar en Descargas</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 450px; margin: 30px auto; padding: 20px; background: #f4f4f9; text-align: center; }
+        .card { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .hidden { display: none; }
+        
+        .btn-enviar {
+            background: #2196F3;
+            color: white;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        .btn-enviar:hover { background: #0b7dda; }
+
+        .btn-subir-custom {
+            display: block;
+            background: #4CAF50;
+            color: white;
+            padding: 15px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        .btn-subir-custom:hover { background: #45a049; }
+
+        .simulador-qr {
+            background: #e3f2fd;
+            border: 1px dashed #bbdefb;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .btn-simular {
+            background: #ff9800;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        .btn-simular:hover { background: #e68a00; }
+
+        #qr-info { background: #eef2f5; padding: 12px; border-radius: 6px; margin-bottom: 15px; font-size: 14px; word-break: break-all; text-align: left; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2>Escáner QR a Descargas</h2>
+        
+        <!-- Simulador de Escáner QR (Puedes cambiar esto por una librería de cámara real si lo prefieres) -->
+        <div id="reader-simulation" class="simulador-qr">
+            <p style="font-size: 13px; color: #0d47a1; margin: 0 0 5px 0;"><strong>Escáner QR</strong></p>
+            <p style="font-size: 12px; color: #555; margin: 0 0 10px 0;">Simula la lectura del código QR para continuar:</p>
+            <button class="btn-simular" onclick="simularLecturaQR()">📸 Simular Lectura QR</button>
+        </div>
+
+        <!-- Sección que aparece al leer el QR -->
+        <div id="upload-section" class="hidden">
+            <div id="qr-info"><strong>QR Detectado:</strong> <span id="qr-result"></span></div>
+            
+            <label for="archivo-input" class="btn-subir-custom">📁 Seleccionar Foto o Archivo</label>
+            <input type="file" id="archivo-input" style="display: none;" onchange="mostrarBotonEnviar()">
+
+            <div id="enviar-container" class="hidden">
+                <p id="nombre-archivo" style="font-size: 13px; color: #666; margin: 10px 0;"></p>
+                <button class="btn-enviar" onclick="guardarEnDescargas()">📥 Guardar en Descargas</button>
+            </div>
+        </div>
+        
+        <p id="mensaje" style="font-weight: bold; margin-top: 15px; font-size: 14px;"></p>
+    </div>
+
+    <script>
+        let codigoLeido = "";
+
+        function simularLecturaQR() {
+            // Aquí puedes cambiar el texto del QR simulado por el que necesites
+            codigoLeido = "ELEMENTO_" + Math.floor(Math.random() * 1000);
+            document.getElementById('qr-result').innerText = codigoLeido;
+            document.getElementById('reader-simulation').style.display = 'none';
+            document.getElementById('upload-section').classList.remove('hidden');
+        }
+
+        function mostrarBotonEnviar() {
+            const fileInput = document.getElementById('archivo-input');
+            if (fileInput.files.length > 0) {
+                document.getElementById('nombre-archivo').innerText = "Archivo listo: " + fileInput.files[0].name;
+                document.getElementById('enviar-container').classList.remove('hidden');
+            }
+        }
+
+        function guardarEnDescargas() {
+            const fileInput = document.getElementById('archivo-input');
+            const mensaje = document.getElementById('mensaje');
+
+            if (fileInput.files.length === 0) return;
+
+            const file = fileInput.files[0];
+            
+            // Creamos un enlace temporal para forzar la descarga del archivo en el PC
+            const url = URL.createObjectURL(file);
+            const a = document.createElement('a');
+            a.href = url;
+            
+            // Renombramos el archivo combinando el código QR leído y su nombre original para organizarlo bien
+            // Ejemplo: QR_ELEMENTO_123_foto.jpg
+            a.download = `QR_${codigoLeido}_${file.name}`;
+            
+            document.body.appendChild(a);
+            a.click();
+            
+            // Limpieza
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            mensaje.style.color = "green";
+            mensaje.innerText = "¡Archivo guardado con éxito en tu carpeta de Descargas!";
+            
+            // Ocultar sección de envío para dejar listo para otro escaneo
+            setTimeout(() => {
+                document.getElementById('upload-section').style.display = 'none';
+                document.getElementById('reader-simulation').style.display = 'block';
+                document.getElementById('enviar-container').classList.add('hidden');
+                fileInput.value = "";
+                mensaje.innerText = "";
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
